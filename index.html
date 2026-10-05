@@ -1,0 +1,3138 @@
+
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Tokyo 2026 Travel Planner</title>
+
+<style>
+:root{
+    --bg:#f4f2ee;
+    --card:#ffffff;
+    --text:#1d1d1f;
+    --muted:#777;
+    --line:#e5e2dc;
+    --accent:#b45f35;
+    --accent2:#2f5d50;
+    --dark:#202124;
+    --success:#3f765e;
+    --shadow:0 8px 30px rgba(0,0,0,.06);
+}
+
+*{
+    box-sizing:border-box;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    margin:0;
+    background:var(--bg);
+    color:var(--text);
+    font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Noto Sans TC",
+        "PingFang TC",
+        "Microsoft JhengHei",
+        sans-serif;
+}
+
+button,
+input,
+textarea{
+    font:inherit;
+}
+
+button{
+    cursor:pointer;
+}
+
+/* =========================
+   HERO
+========================= */
+
+.hero{
+    min-height:470px;
+    position:relative;
+    display:flex;
+    align-items:flex-end;
+    padding:40px 20px;
+    color:#fff;
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(0,0,0,.05),
+            rgba(0,0,0,.78)
+        ),
+        url("https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?auto=format&fit=crop&w=1800&q=85")
+        center/cover;
+}
+
+.hero-content{
+    width:100%;
+    max-width:1100px;
+    margin:auto;
+}
+
+.hero-label{
+    display:inline-block;
+    padding:7px 13px;
+    border-radius:30px;
+    background:rgba(255,255,255,.15);
+    backdrop-filter:blur(10px);
+    font-size:12px;
+    margin-bottom:15px;
+}
+
+.hero h1{
+    font-size:clamp(42px,8vw,76px);
+    line-height:.95;
+    margin:0 0 15px;
+    letter-spacing:-.05em;
+}
+
+.hero p{
+    margin:0;
+    font-size:16px;
+}
+
+/* =========================
+   COUNTDOWN
+========================= */
+
+.countdown{
+    max-width:1100px;
+    margin:-30px auto 0;
+    position:relative;
+    z-index:5;
+    padding:0 18px;
+}
+
+.countdown-card{
+    background:var(--card);
+    border-radius:24px;
+    padding:22px;
+    box-shadow:var(--shadow);
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:20px;
+}
+
+.countdown-label{
+    color:var(--muted);
+    font-size:13px;
+}
+
+.countdown-number{
+    font-size:38px;
+    font-weight:800;
+}
+
+.countdown-number small{
+    font-size:15px;
+    font-weight:500;
+}
+
+/* =========================
+   TOOLBAR
+========================= */
+
+.toolbar{
+    max-width:1100px;
+    margin:20px auto;
+    padding:0 18px;
+}
+
+.toolbar-inner{
+    display:flex;
+    gap:8px;
+    flex-wrap:wrap;
+}
+
+.tool-btn{
+    border:1px solid var(--line);
+    background:var(--card);
+    border-radius:12px;
+    padding:10px 14px;
+    color:var(--text);
+}
+
+.tool-btn.primary{
+    background:var(--dark);
+    color:#fff;
+    border-color:var(--dark);
+}
+
+.tool-btn.active{
+    background:var(--accent2);
+    color:#fff;
+}
+
+/* =========================
+   INFO
+========================= */
+
+.info{
+    max-width:1100px;
+    margin:20px auto;
+    padding:0 18px;
+}
+
+.info-grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:10px;
+}
+
+.info-card{
+    background:var(--card);
+    border-radius:18px;
+    padding:17px;
+    box-shadow:var(--shadow);
+}
+
+.info-card small{
+    display:block;
+    color:var(--muted);
+    font-size:12px;
+}
+
+.info-card strong{
+    display:block;
+    margin-top:4px;
+}
+
+/* =========================
+   WEATHER
+========================= */
+
+.weather{
+    max-width:1100px;
+    margin:20px auto;
+    padding:0 18px;
+}
+
+.weather-card{
+    background:linear-gradient(135deg,#e9eee9,#fff);
+    border-radius:22px;
+    padding:20px;
+    display:flex;
+    justify-content:space-between;
+    gap:15px;
+}
+
+.weather-main{
+    display:flex;
+    align-items:center;
+    gap:14px;
+}
+
+.weather-icon{
+    font-size:42px;
+}
+
+.weather-temp{
+    font-size:25px;
+    font-weight:800;
+}
+
+.weather-note{
+    font-size:12px;
+    color:var(--muted);
+}
+
+/* =========================
+   DAY NAV
+========================= */
+
+.day-nav{
+    position:sticky;
+    top:0;
+    z-index:50;
+    background:rgba(244,242,238,.92);
+    backdrop-filter:blur(16px);
+    border-bottom:1px solid var(--line);
+}
+
+.day-nav-inner{
+    max-width:1100px;
+    margin:auto;
+    display:flex;
+    gap:7px;
+    padding:10px 14px;
+    overflow-x:auto;
+}
+
+.day-btn{
+    flex:0 0 auto;
+    border:0;
+    padding:10px 16px;
+    border-radius:13px;
+    background:#fff;
+    color:#666;
+    font-weight:700;
+}
+
+.day-btn.active{
+    background:var(--dark);
+    color:#fff;
+}
+
+/* =========================
+   MAIN
+========================= */
+
+.container{
+    max-width:1100px;
+    margin:auto;
+    padding:30px 18px 80px;
+}
+
+.day-section{
+    display:none;
+}
+
+.day-section.active{
+    display:block;
+}
+
+.day-header{
+    margin-bottom:25px;
+}
+
+.day-number{
+    color:var(--accent);
+    font-weight:800;
+    font-size:13px;
+    letter-spacing:.12em;
+}
+
+.day-header h2{
+    margin:6px 0;
+    font-size:clamp(28px,5vw,45px);
+    line-height:1.12;
+}
+
+.day-header p{
+    color:var(--muted);
+}
+
+/* =========================
+   HIGHLIGHT
+========================= */
+
+.highlight{
+    background:var(--dark);
+    color:#fff;
+    border-radius:22px;
+    padding:22px;
+    margin-bottom:25px;
+}
+
+.highlight small{
+    opacity:.55;
+}
+
+.highlight h3{
+    margin:4px 0;
+}
+
+/* =========================
+   TRANSPORT
+========================= */
+
+.transport{
+    background:#edf2ef;
+    border-radius:18px;
+    padding:17px;
+    margin-bottom:25px;
+}
+
+.transport-title{
+    font-weight:800;
+    margin-bottom:12px;
+}
+
+.route{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    overflow-x:auto;
+}
+
+.station{
+    background:#fff;
+    padding:9px 12px;
+    border-radius:12px;
+    white-space:nowrap;
+}
+
+.arrow{
+    color:var(--accent);
+    font-weight:800;
+    white-space:nowrap;
+}
+
+/* =========================
+   TIMELINE
+========================= */
+
+.timeline{
+    position:relative;
+}
+
+.timeline:before{
+    content:"";
+    position:absolute;
+    left:68px;
+    top:0;
+    bottom:0;
+    width:1px;
+    background:var(--line);
+}
+
+.timeline-item{
+    display:grid;
+    grid-template-columns:68px 1fr;
+    gap:18px;
+    margin-bottom:17px;
+}
+
+.time{
+    text-align:right;
+    padding-top:15px;
+    font-size:13px;
+    font-weight:800;
+    color:#666;
+}
+
+.event{
+    position:relative;
+    background:var(--card);
+    border-radius:18px;
+    padding:17px;
+    box-shadow:var(--shadow);
+}
+
+.event:before{
+    content:"";
+    position:absolute;
+    left:-24px;
+    top:21px;
+    width:9px;
+    height:9px;
+    border-radius:50%;
+    background:var(--dark);
+    border:3px solid var(--bg);
+}
+
+.event.completed{
+    opacity:.55;
+}
+
+.event.completed h4{
+    text-decoration:line-through;
+}
+
+.event-top{
+    display:flex;
+    justify-content:space-between;
+    gap:10px;
+}
+
+.event h4{
+    margin:0 0 5px;
+    font-size:17px;
+}
+
+.event p{
+    margin:0;
+    color:var(--muted);
+    font-size:13px;
+}
+
+.check-btn{
+    width:32px;
+    height:32px;
+    border-radius:50%;
+    border:1px solid var(--line);
+    background:#fff;
+    flex:0 0 auto;
+}
+
+.check-btn.checked{
+    background:var(--success);
+    color:#fff;
+    border-color:var(--success);
+}
+
+.event-actions{
+    display:flex;
+    gap:7px;
+    flex-wrap:wrap;
+    margin-top:12px;
+}
+
+.small-btn{
+    border:1px solid var(--line);
+    background:#fafafa;
+    padding:7px 10px;
+    border-radius:9px;
+    font-size:12px;
+}
+
+.map-btn{
+    text-decoration:none;
+    color:#fff;
+    background:var(--dark);
+}
+
+.edit-btn{
+    background:#f1eee8;
+}
+
+/* =========================
+   RESTAURANTS
+========================= */
+
+.restaurant-box{
+    margin-top:30px;
+}
+
+.restaurant-box h3{
+    margin-bottom:13px;
+}
+
+.restaurant-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:12px;
+}
+
+.restaurant{
+    background:#fff;
+    border-radius:17px;
+    padding:16px;
+    box-shadow:var(--shadow);
+}
+
+.restaurant h4{
+    margin:0 0 4px;
+}
+
+.restaurant p{
+    color:var(--muted);
+    font-size:12px;
+    margin:0 0 12px;
+}
+
+/* =========================
+   BUDGET
+========================= */
+
+.budget{
+    max-width:1100px;
+    margin:10px auto 30px;
+    padding:0 18px;
+}
+
+.budget-card{
+    background:#fff;
+    border-radius:22px;
+    padding:20px;
+    box-shadow:var(--shadow);
+}
+
+.budget-total{
+    font-size:32px;
+    font-weight:800;
+    margin:5px 0 18px;
+}
+
+.budget-grid{
+    display:grid;
+    grid-template-columns:repeat(5,1fr);
+    gap:8px;
+}
+
+.budget-field label{
+    display:block;
+    font-size:11px;
+    color:var(--muted);
+    margin-bottom:5px;
+}
+
+.budget-field input{
+    width:100%;
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:9px;
+}
+
+/* =========================
+   EDIT PANEL
+========================= */
+
+.editor{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.45);
+    z-index:100;
+    display:none;
+    align-items:flex-end;
+}
+
+.editor.show{
+    display:flex;
+}
+
+.editor-panel{
+    width:100%;
+    max-height:90vh;
+    overflow:auto;
+    background:#fff;
+    border-radius:25px 25px 0 0;
+    padding:22px;
+}
+
+.editor-panel h3{
+    margin-top:0;
+}
+
+.editor-grid{
+    display:grid;
+    gap:12px;
+}
+
+.editor-grid label{
+    font-size:12px;
+    color:#666;
+}
+
+.editor-grid input,
+.editor-grid textarea,
+.editor-grid select{
+    width:100%;
+    border:1px solid var(--line);
+    border-radius:11px;
+    padding:11px;
+    margin-top:4px;
+}
+
+.editor-actions{
+    display:flex;
+    gap:8px;
+    margin-top:15px;
+}
+
+.save{
+    flex:1;
+    background:var(--dark);
+    color:#fff;
+    border:0;
+    padding:12px;
+    border-radius:12px;
+}
+
+.cancel{
+    padding:12px 18px;
+    border:1px solid var(--line);
+    background:#fff;
+    border-radius:12px;
+}
+
+/* =========================
+   FOOTER
+========================= */
+
+.footer{
+    background:var(--dark);
+    color:#fff;
+    text-align:center;
+    padding:40px 20px;
+}
+
+.footer h3{
+    margin:0 0 5px;
+}
+
+.footer p{
+    opacity:.55;
+    font-size:12px;
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media(max-width:700px){
+
+    .hero{
+        min-height:430px;
+        padding:30px 17px;
+    }
+
+    .hero h1{
+        font-size:43px;
+    }
+
+    .countdown{
+        padding:0 13px;
+    }
+
+    .countdown-card{
+        padding:17px;
+    }
+
+    .countdown-number{
+        font-size:30px;
+    }
+
+    .info{
+        padding:0 13px;
+    }
+
+    .info-grid{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .weather{
+        padding:0 13px;
+    }
+
+    .weather-card{
+        align-items:flex-start;
+    }
+
+    .container{
+        padding:25px 13px 60px;
+    }
+
+    .timeline:before{
+        left:56px;
+    }
+
+    .timeline-item{
+        grid-template-columns:56px 1fr;
+        gap:14px;
+    }
+
+    .event{
+        padding:14px;
+    }
+
+    .event:before{
+        left:-21px;
+    }
+
+    .restaurant-grid{
+        grid-template-columns:1fr;
+    }
+
+    .budget-grid{
+        grid-template-columns:repeat(2,1fr);
+    }
+}
+
+@media(max-width:390px){
+
+    .hero h1{
+        font-size:38px;
+    }
+
+    .timeline:before{
+        left:51px;
+    }
+
+    .timeline-item{
+        grid-template-columns:51px 1fr;
+        gap:12px;
+    }
+}
+</style>
+</head>
+
+
+<body>
+
+
+<!-- =========================
+     HERO
+========================= -->
+
+<header class="hero">
+
+    <div class="hero-content">
+
+        <div class="hero-label">
+            🇯🇵 TOKYO TRAVEL PLANNER · 2026
+        </div>
+
+        <h1>
+            東京<br>
+            5日4夜
+        </h1>
+
+        <p>
+            2026.11.25 — 11.29<br>
+            🍁 紅葉 · 🛍️ 購物 · 🌃 夜景 · 🎨 藝術
+        </p>
+
+    </div>
+
+</header>
+
+
+<!-- =========================
+     COUNTDOWN
+========================= -->
+
+<section class="countdown">
+
+    <div class="countdown-card">
+
+        <div>
+            <div class="countdown-label">
+                距離出發
+            </div>
+
+            <div class="countdown-number" id="countdown">
+                --
+                <small>日</small>
+            </div>
+        </div>
+
+        <div>
+            ✈️<br>
+            <span style="font-size:12px;color:#777">
+                11月25日出發
+            </span>
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     TOOLBAR
+========================= -->
+
+<section class="toolbar">
+
+    <div class="toolbar-inner">
+
+        <button class="tool-btn primary"
+                onclick="toggleEditMode()">
+            ✏️ Edit Mode
+        </button>
+
+        <button class="tool-btn"
+                onclick="toggleTheme()">
+            🌓 Theme
+        </button>
+
+        <button class="tool-btn"
+                onclick="exportData()">
+            ⬇️ Backup
+        </button>
+
+        <button class="tool-btn"
+                onclick="resetData()">
+            ↺ Reset
+        </button>
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     INFO
+========================= -->
+
+<section class="info">
+
+    <div class="info-grid">
+
+        <div class="info-card">
+            <small>旅行日期</small>
+            <strong>11/25 – 11/29</strong>
+        </div>
+
+        <div class="info-card">
+            <small>天數</small>
+            <strong>5日4夜</strong>
+        </div>
+
+        <div class="info-card">
+            <small>季節</small>
+            <strong>🍁 深秋</strong>
+        </div>
+
+        <div class="info-card">
+            <small>狀態</small>
+            <strong id="progressText">0% 完成</strong>
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     WEATHER
+========================= -->
+
+<section class="weather">
+
+    <div class="weather-card">
+
+        <div class="weather-main">
+
+            <div class="weather-icon">
+                🍁
+            </div>
+
+            <div>
+                <div class="weather-temp">
+                    Tokyo
+                </div>
+
+                <div class="weather-note">
+                    11月底通常偏涼，建議帶外套及圍巾
+                </div>
+            </div>
+
+        </div>
+
+        <div style="text-align:right">
+            <strong>Weather</strong><br>
+            <span class="weather-note">
+                出發前 7–10 日更新
+            </span>
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     BUDGET
+========================= -->
+
+<section class="budget">
+
+    <div class="budget-card">
+
+        <div style="font-size:13px;color:#777">
+            💰 Trip Budget
+        </div>
+
+        <div class="budget-total">
+            ¥ <span id="budgetTotal">0</span>
+        </div>
+
+        <div class="budget-grid">
+
+            <div class="budget-field">
+                <label>住宿</label>
+                <input type="number"
+                       data-budget
+                       value="0">
+            </div>
+
+            <div class="budget-field">
+                <label>交通</label>
+                <input type="number"
+                       data-budget
+                       value="0">
+            </div>
+
+            <div class="budget-field">
+                <label>餐飲</label>
+                <input type="number"
+                       data-budget
+                       value="0">
+            </div>
+
+            <div class="budget-field">
+                <label>門票</label>
+                <input type="number"
+                       data-budget
+                       value="0">
+            </div>
+
+            <div class="budget-field">
+                <label>購物</label>
+                <input type="number"
+                       data-budget
+                       value="0">
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     DAY NAV
+========================= -->
+
+<nav class="day-nav">
+
+    <div class="day-nav-inner">
+
+        <button class="day-btn active"
+                onclick="showDay(1,this)">
+            DAY 1
+        </button>
+
+        <button class="day-btn"
+                onclick="showDay(2,this)">
+            DAY 2
+        </button>
+
+        <button class="day-btn"
+                onclick="showDay(3,this)">
+            DAY 3
+        </button>
+
+        <button class="day-btn"
+                onclick="showDay(4,this)">
+            DAY 4
+        </button>
+
+        <button class="day-btn"
+                onclick="showDay(5,this)">
+            DAY 5
+        </button>
+
+    </div>
+
+</nav>
+
+
+<main class="container">
+
+
+<!-- =====================================================
+     DAY 1
+===================================================== -->
+
+<section class="day-section active"
+         id="day1">
+
+    <div class="day-header">
+
+        <div class="day-number">
+            DAY 01 · 11/25 WED
+        </div>
+
+        <h2>
+            淺草 → 晴空塔<br>
+            → 六義園夜紅葉
+        </h2>
+
+        <p>
+            傳統東京＋東京夜景＋限定夜紅葉
+        </p>
+
+    </div>
+
+
+    <div class="highlight">
+
+        <small>Today's Highlight</small>
+
+        <h3>
+            🍁 六義園夜間紅葉
+        </h3>
+
+        <p>
+            2026/11/25 起的夜間特別觀賞，
+            正好配合你的第一天行程。
+        </p>
+
+    </div>
+
+
+    <div class="transport">
+
+        <div class="transport-title">
+            🚆 今日交通
+        </div>
+
+        <div class="route">
+
+            <div class="station">
+                ✈️ Airport
+            </div>
+
+            <div class="arrow">→</div>
+
+            <div class="station">
+                淺草
+            </div>
+
+            <div class="arrow">→</div>
+
+            <div class="station">
+                晴空塔
+            </div>
+
+            <div class="arrow">→</div>
+
+            <div class="station">
+                駒込
+            </div>
+
+            <div class="arrow">→</div>
+
+            <div class="station">
+                六義園
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="timeline">
+
+
+        <div class="timeline-item">
+
+            <div class="time">
+                11:00
+            </div>
+
+            <div class="event"
+                 data-event="d1-1">
+
+                <div class="event-top">
+
+                    <div>
+                        <h4>✈️ 抵達東京</h4>
+
+                        <p>
+                            機場 → 酒店 → 行李寄存
+                        </p>
+                    </div>
+
+                    <button class="check-btn"
+                            onclick="toggleDone(this)">
+                        ✓
+                    </button>
+
+                </div>
+
+                <div class="event-actions">
+
+                    <a class="small-btn map-btn"
+                       target="_blank"
+                       href="https://www.google.com/maps/search/?api=1&query=Tokyo+Japan">
+                        📍 Google Maps
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="timeline-item">
+
+            <div class="time">
+                15:00
+            </div>
+
+            <div class="event"
+                 data-event="d1-2">
+
+                <div class="event-top">
+
+                    <div>
+                        <h4>⛩️ 淺草寺・雷門</h4>
+
+                        <p>
+                            仲見世通り＋淺草寺散步
+                        </p>
+                    </div>
+
+                    <button class="check-btn"
+                            onclick="toggleDone(this)">
+                        ✓
+                    </button>
+
+                </div>
+
+                <div class="event-actions">
+
+                    <a class="small-btn map-btn"
+                       target="_blank"
+                       href="https://www.google.com/maps/search/?api=1&query=Sensoji+Temple+Tokyo">
+                        📍 Google Maps
+                    </a>
+
+                    <button class="small-btn edit-btn"
+                            onclick="openEditor('d1-2')">
+                        ✏️ Edit
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="timeline-item">
+
+            <div class="time">
+                16:45
+            </div>
+
+            <div class="event"
+                 data-event="d1-3">
+
+                <div class="event-top">
+
+                    <div>
+                        <h4>🗼 東京晴空塔</h4>
+
+                        <p>
+                            展望台＋Tokyo Solamachi
+                        </p>
+                    </div>
+
+                    <button class="check-btn"
+                            onclick="toggleDone(this)">
+                        ✓
+                    </button>
+
+                </div>
+
+                <div class="event-actions">
+
+                    <a class="small-btn map-btn"
+                       target="_blank"
+                       href="https://www.google.com/maps/search/?api=1&query=Tokyo+Skytree">
+                        📍 Google Maps
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="timeline-item">
+
+            <div class="time">
+                19:00
+            </div>
+
+            <div class="event"
+                 data-event="d1-4">
+
+                <div class="event-top">
+
+                    <div>
+                        <h4>🍁 六義園夜間紅葉</h4>
+
+                        <p>
+                            夜間燈光＋紅葉＋池面倒影
+                        </p>
+                    </div>
+
+                    <button class="check-btn"
+                            onclick="toggleDone(this)">
+                        ✓
+                    </button>
+
+                </div>
+
+                <div class="event-actions">
+
+                    <a class="small-btn map-btn"
+                       target="_blank"
+                       href="https://www.google.com/maps/search/?api=1&query=Rikugien+Gardens+Tokyo">
+                        📍 Google Maps
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="restaurant-box">
+
+        <h3>🍣 今日餐廳推薦</h3>
+
+        <div class="restaurant-grid">
+
+            <div class="restaurant">
+
+                <h4>淺草今半</h4>
+
+                <p>
+                    壽喜燒・淺草
+                </p>
+
+                <a class="small-btn map-btn"
+                   target="_blank"
+                   href="https://www.google.com/maps/search/?api=1&query=Asakusa+Imahan">
+                    📍 地圖
+                </a>
+
+            </div>
+
+
+            <div class="restaurant">
+
+                <h4>淺草炸牛</h4>
+
+                <p>
+                    炸牛排・淺草雷門
+                </p>
+
+                <a class="small-btn map-btn"
+                   target="_blank"
+                   href="https://www.google.com/maps/search/?api=1&query=Asakusa+Gyukatsu">
+                    📍 地圖
+                </a>
+
+            </div>
+
+
+            <div class="restaurant">
+
+                <h4>Maguro-to-Shari</h4>
+
+                <p>
+                    海鮮・壽司・淺草
+                </p>
+
+                <a class="small-btn map-btn"
+                   target="_blank"
+                   href="https://www.google.com/maps/search/?api=1&query=Maguro-to-Shari+Asakusa">
+                    📍 地圖
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     DAY 2
+===================================================== -->
+
+<section class="day-section"
+         id="day2">
+
+    <div class="day-header">
+
+        <div class="day-number">
+            DAY 02 · 11/26 THU
+        </div>
+
+        <h2>
+            上野 → 秋葉原<br>
+            → 東京站 → 銀座
+        </h2>
+
+        <p>
+            文化＋動漫＋電器＋購物
+        </p>
+
+    </div>
+
+
+    <div class="transport">
+
+        <div class="transport-title">
+            🚆 今日交通
+        </div>
+
+        <div class="route">
+
+            <div class="station">上野</div>
+            <div class="arrow">→</div>
+            <div class="station">秋葉原</div>
+            <div class="arrow">→</div>
+            <div class="station">東京站</div>
+            <div class="arrow">→</div>
+            <div class="station">銀座</div>
+
+        </div>
+
+    </div>
+
+
+    <div class="timeline">
+
+        <div class="timeline-item">
+
+            <div class="time">09:00</div>
+
+            <div class="event"
+                 data-event="d2-1">
+
+                <div class="event-top">
+
+                    <div>
+                        <h4>🌳 上野公園</h4>
+                        <p>秋季散步＋博物館／動物園</p>
+                    </div>
+
+                    <button class="check-btn"
+                            onclick="toggleDone(this)">
+                        ✓
+                    </button>
+
+                </div>
+
+                <div class="event-actions">
+
+                    <a class="small-btn map-btn"
+                       target="_blank"
+                       href="https://www.google.com/maps/search/?api=1&query=Ueno+Park+Tokyo">
+                        📍 Google Maps
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="timeline-item">
+
+            <div class="time">11:30</div>
+
+            <div class="event"
+                 data-event="d2-2">
+
+                <div class="event-top">
+
+                    <div>
+                        <h4>🛍️ 阿美橫町</h4>
+                        <p>零食、藥妝、食品、街頭小店</p>
+                    </div>
+
+                    <button class="check-btn"
+                            onclick="toggleDone(this)">
+                        ✓
+                    </button>
+
+                </div>
+
+                <div class="event-actions">
+
+                    <a class="small-btn map-btn"
+                       target="_blank"
+                       href="https://www.google.com/maps/search/?api=1&query=Ameyoko+Tokyo">
+                        📍 Google Maps
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="timeline-item">
+
+            <div class="time">13:00</div>
+
+            <div class="event"
+                 data-event="d2-3">
+
+                <div class="event-top">
+
+                    <div>
+                        <h4>🎮 秋葉原</h4>
+                        <p>電器、動漫、Figure、遊戲</p>
+                    </div>
+
+                    <button class="check-btn"
+                            onclick="toggleDone(this)">
+                        ✓
+                    </button>
+
+                </div>
+
+                <div class="event-actions">
+
+                    <a class="small-btn map-btn"
+                       target="_blank"
+                       href="https://www.google.com/maps/search/?api=1&query=Akihabara+Tokyo">
+                        📍 Google Maps
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="timeline-item">
+
+            <div class="time">16:00</div>
+
+            <div class="event"
+                 data-event="d2-4">
+
+                <div class="event-top">
+
+                    <div>
+                        <h4>🚉 東京站・丸之內</h4>
+                        <p>東京站＋KITTE＋丸之內街景</p>
+                    </div>
+
+                    <button class="check-btn"
+                            onclick="toggleDone(this)">
+                        ✓
+                    </button>
+
+                </div>
+
+                <div class="event-actions">
+
+                    <a class="small-btn map-btn"
+                       target="_blank"
+                       href="https://www.google.com/maps/search/?api=1&query=Tokyo+Station">
+                        📍 Google Maps
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="timeline-item">
+
+            <div class="time">17:30</div>
+
+            <div class="event"
+                 data-event="d2-5">
+
+                <div class="event-top">
+
+                    <div>
+                        <h4>✨ 銀座</h4>
+                        <p>Ginza Six＋三越＋UNIQLO Ginza</p>
+                    </div>
+
+                    <button class="check-btn"
+                            onclick="toggleDone(this)">
+                        ✓
+                    </button>
+
+                </div>
+
+                <div class="event-actions">
+
+                    <a class="small-btn map-btn"
+                       target="_blank"
+                       href="https://www.google.com/maps/search/?api=1&query=Ginza+Tokyo">
+                        📍 Google Maps
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="restaurant-box">
+
+        <h3>🍣 今日餐廳推薦</h3>
+
+        <div class="restaurant-grid">
+
+            <div class="restaurant">
+                <h4>上野／阿美橫町</h4>
+                <p>午餐：壽司・拉麵・海鮮</p>
+                <a class="small-btn map-btn"
+                   target="_blank"
+                   href="https://www.google.com/maps/search/?api=1&query=Ameyoko+Tokyo+restaurants">
+                    📍 尋找餐廳
+                </a>
+            </div>
+
+            <div class="restaurant">
+                <h4>秋葉原</h4>
+                <p>咖喱・拉麵・居酒屋</p>
+                <a class="small-btn map-btn"
+                   target="_blank"
+                   href="https://www.google.com/maps/search/?api=1&query=Akihabara+restaurants">
+                    📍 尋找餐廳
+                </a>
+            </div>
+
+            <div class="restaurant">
+                <h4>銀座</h4>
+                <p>壽司・和牛・高級日本料理</p>
+                <a class="small-btn map-btn"
+                   target="_blank"
+                   href="https://www.google.com/maps/search/?api=1&query=Ginza+Tokyo+restaurants">
+                    📍 尋找餐廳
+                </a>
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     DAY 3
+===================================================== -->
+
+<section class="day-section"
+         id="day3">
+
+    <div class="day-header">
+
+        <div class="day-number">
+            DAY 03 · 11/27 FRI
+        </div>
+
+        <h2>
+            高尾山紅葉<br>
+            → 澀谷 SKY
+        </h2>
+
+        <p>
+            東京近郊自然＋東京夜景
+        </p>
+
+    </div>
+
+
+    <div class="highlight">
+
+        <small>Today's Highlight</small>
+
+        <h3>
+            🍁 高尾山紅葉 → 🌃 Shibuya SKY
+        </h3>
+
+        <p>
+            白天看紅葉，晚上回到東京市中心看夜景。
+        </p>
+
+    </div>
+
+
+    <div class="transport">
+
+        <div class="transport-title">
+            🚆 今日交通
+        </div>
+
+        <div class="route">
+
+            <div class="station">新宿</div>
+            <div class="arrow">→</div>
+            <div class="station">高尾山</div>
+            <div class="arrow">→</div>
+            <div class="station">新宿</div>
+            <div class="arrow">→</div>
+            <div class="station">澀谷</div>
+
+        </div>
+
+    </div>
+
+
+    <div class="timeline">
+
+
+        <div class="timeline-item">
+
+            <div class="time">08:00</div>
+
+            <div class="event"
+                 data-event="d3-1">
+
+                <div class="event-top">
+
+                    <div>
+                        <h4>🚆 新宿 → 高尾山</h4>
+                        <p>前往高尾山口站</p>
+                    </div>
+
+                    <button class="check-btn"
+                            onclick="toggleDone(this)">
+                        ✓
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="timeline-item">
+
+            <div class="time">09:30</div>
+
+            <div class="event"
+                 data-event="d3-2">
+
+                <div class="event-top">
+
+                    <div>
+                        <h4>🍁 高尾山</h4>
+                        <p>纜車＋紅葉散步＋山景</p>
+                    </div>
+
+                    <button class="check-btn"
+                            onclick="toggleDone(this)">
+                        ✓
+                    </button>
+
+                </div>
+
+                <div class="event-actions">
+
+                    <a class="small-btn map-btn"
+                       target="_blank"
+                       href="https://www.google.com/maps/search/?api=1&query=Mount+Takao+Tokyo">
+                        📍 Google Maps
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="timeline-item">
+
+            <div class="time">14:00</div>
+
+            <div class="event"
+                 data-event="d3-3">
+
+                <div class="event-top">
+
+                    <div>
+                        <h4>🍜 高尾山午餐</h4>
+                        <p>蕎麥麵／山菜料理</p>
+                    </div>
+
+                    <button class="check-btn"
+                            onclick="toggleDone(this)">
+                        ✓
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="timeline-item">
+
+            <div class="time">18:00</div>
+
+            <div class="event"
+                 data-event="d3-4">
+
+                <div class="event-top">
+
+                    <div>
+                        <h4>📸 澀谷</h4>
+                        <p>Scramble Crossing＋PARCO＋Loft</p>
+                    </div>
+
+                    <button class="check-btn"
+                            onclick="toggleDone(this)">
+                        ✓
+                    </button>
+
+                </div>
+
+                <div class="event-actions">
+
+                    <a class="small-btn map-btn"
+                       target="_blank"
+                       href="https://www.google.com/maps/search/?api=1&query=Shibuya+Crossing">
+                        📍 Google Maps
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="timeline-item">
+
+            <div class="time">19:00</div>
+
+            <div class="event"
+                 data-event="d3-5">
+
+                <div class="event-top">
+
+                    <div>
+                        <h4>🌃 Shibuya SKY</h4>
+                        <p>日落＋東京夜景</p>
+                    </div>
+
+                    <button class="check-btn"
+                            onclick="toggleDone(this)">
+                        ✓
+                    </button>
+
+                </div>
+
+                <div class="event-actions">
+
+                    <a class="small-btn map-btn"
+                       target="_blank"
+                       href="https://www.google.com/maps/search/?api=1&query=Shibuya+Sky">
+                        📍 Google Maps
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="restaurant-box">
+
+        <h3>🍜 今日餐廳推薦</h3>
+
+        <div class="restaurant-grid">
+
+            <div class="restaurant">
+                <h4>高尾山</h4>
+                <p>山菜料理・蕎麥麵</p>
+                <a class="small-btn map-btn"
+                   target="_blank"
+                   href="https://www.google.com/maps/search/?api=1&query=Mount+Takao+restaurants">
+                    📍 尋找餐廳
+                </a>
+            </div>
+
+            <div class="restaurant">
+                <h4>澀谷</h4>
+                <p>燒肉・拉麵・居酒屋</p>
+                <a class="small-btn map-btn"
+                   target="_blank"
+                   href="https://www.google.com/maps/search/?api=1&query=Shibuya+Tokyo+restaurants">
+                    📍 尋找餐廳
+                </a>
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     DAY 4
+===================================================== -->
+
+<section class="day-section"
+         id="day4">
+
+    <div class="day-header">
+
+        <div class="day-number">
+            DAY 04 · 11/28 SAT
+        </div>
+
+        <h2>
+            築地 → teamLab<br>
+            → 東京鐵塔 → 六本木
+        </h2>
+
+        <p>
+            美食＋藝術＋城市夜景
+        </p>
+
+    </div>
+
+
+    <div class="transport">
+
+        <div class="transport-title">
+            🚆 今日交通
+        </div>
+
+        <div class="route">
+
+            <div class="station">築地</div>
+            <div class="arrow">→</div>
+            <div class="station">麻布台</div>
+            <div class="arrow">→</div>
+            <div class="station">東京鐵塔</div>
+            <div class="arrow">→</div>
+            <div class="station">六本木</div>
+
+        </div>
+
+    </div>
+
+
+    <div class="timeline">
+
+
+        <div class="timeline-item">
+
+            <div class="time">08:30</div>
+
+            <div class="event"
+                 data-event="d4-1">
+
+                <div class="event-top">
+
+                    <div>
+                        <h4>🐟 築地場外市場</h4>
+                        <p>海鮮、壽司、玉子燒</p>
+                    </div>
+
+                    <button class="check-btn"
+                            onclick="toggleDone(this)">
+                        ✓
+                    </button>
+
+                </div>
+
+                <div class="event-actions">
+
+                    <a class="small-btn map-btn"
+                       target="_blank"
+                       href="https://www.google.com/maps/search/?api=1&query=Tsukiji+Outer+Market">
+                        📍 Google Maps
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="timeline-item">
+
+            <div class="time">11:30</div>
+
+            <div class="event"
+                 data-event="d4-2">
+
+                <div class="event-top">
+
+                    <div>
+                        <h4>🎨 teamLab Borderless</h4>
+                        <p>沉浸式數碼藝術</p>
+                    </div>
+
+                    <button class="check-btn"
+                            onclick="toggleDone(this)">
+                        ✓
+                    </button>
+
+                </div>
+
+                <div class="event-actions">
+
+                    <a class="small-btn map-btn"
+                       target="_blank"
+                       href="https://www.google.com/maps/search/?api=1&query=teamLab+Borderless+Azabudai">
+                        📍 Google Maps
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="timeline-item">
+
+            <div class="time">16:00</div>
+
+            <div class="event"
+                 data-event="d4-3">
+
+                <div class="event-top">
+
+                    <div>
+                        <h4>🏙️ 麻布台 Hills</h4>
+                        <p>咖啡＋商店＋城市景觀</p>
+                    </div>
+
+                    <button class="check-btn"
+                            onclick="toggleDone(this)">
+                        ✓
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="timeline-item">
+
+            <div class="time">17:00</div>
+
+            <div class="event"
+                 data-event="d4-4">
+
+                <div class="event-top">
+
+                    <div>
+                        <h4>🗼 東京鐵塔</h4>
+                        <p>黃昏 → 入夜</p>
+                    </div>
+
+                    <button class="check-btn"
+                            onclick="toggleDone(this)">
+                        ✓
+                    </button>
+
+                </div>
+
+                <div class="event-actions">
+
+                    <a class="small-btn map-btn"
+                       target="_blank"
+                       href="https://www.google.com/maps/search/?api=1&query=Tokyo+Tower">
+                        📍 Google Maps
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="timeline-item">
+
+            <div class="time">19:00</div>
+
+            <div class="event"
+                 data-event="d4-5">
+
+                <div class="event-top">
+
+                    <div>
+                        <h4>🌃 六本木</h4>
+                        <p>Tokyo Midtown＋晚餐</p>
+                    </div>
+
+                    <button class="check-btn"
+                            onclick="toggleDone(this)">
+                        ✓
+                    </button>
+
+                </div>
+
+                <div class="event-actions">
+
+                    <a class="small-btn map-btn"
+                       target="_blank"
+                       href="https://www.google.com/maps/search/?api=1&query=Roppongi+Tokyo">
+                        📍 Google Maps
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="restaurant-box">
+
+        <h3>🍣 今日餐廳推薦</h3>
+
+        <div class="restaurant-grid">
+
+            <div class="restaurant">
+                <h4>築地</h4>
+                <p>壽司・海鮮丼・刺身</p>
+                <a class="small-btn map-btn"
+                   target="_blank"
+                   href="https://www.google.com/maps/search/?api=1&query=Tsukiji+restaurants">
+                    📍 尋找餐廳
+                </a>
+            </div>
+
+            <div class="restaurant">
+                <h4>六本木</h4>
+                <p>和牛・居酒屋・日本料理</p>
+                <a class="small-btn map-btn"
+                   target="_blank"
+                   href="https://www.google.com/maps/search/?api=1&query=Roppongi+Tokyo+restaurants">
+                    📍 尋找餐廳
+                </a>
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     DAY 5
+===================================================== -->
+
+<section class="day-section"
+         id="day5">
+
+    <div class="day-header">
+
+        <div class="day-number">
+            DAY 05 · 11/29 SUN
+        </div>
+
+        <h2>
+            明治神宮 → 新宿<br>
+            → 最後購物 → ✈️
+        </h2>
+
+        <p>
+            輕鬆收尾＋最後掃貨
+        </p>
+
+    </div>
+
+
+    <div class="transport">
+
+        <div class="transport-title">
+            🚆 今日交通
+        </div>
+
+        <div class="route">
+
+            <div class="station">酒店</div>
+            <div class="arrow">→</div>
+            <div class="station">明治神宮</div>
+            <div class="arrow">→</div>
+            <div class="station">新宿</div>
+            <div class="arrow">→</div>
+            <div class="station">Airport</div>
+
+        </div>
+
+    </div>
+
+
+    <div class="timeline">
+
+
+        <div class="timeline-item">
+
+            <div class="time">09:00</div>
+
+            <div class="event"
+                 data-event="d5-1">
+
+                <div class="event-top">
+
+                    <div>
+                        <h4>🏨 Check-out</h4>
+                        <p>行李寄存在酒店</p>
+                    </div>
+
+                    <button class="check-btn"
+                            onclick="toggleDone(this)">
+                        ✓
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="timeline-item">
+
+            <div class="time">10:00</div>
+
+            <div class="event"
+                 data-event="d5-2">
+
+                <div class="event-top">
+
+                    <div>
+                        <h4>⛩️ 明治神宮</h4>
+                        <p>森林神宮＋秋季散步</p>
+                    </div>
+
+                    <button class="check-btn"
+                            onclick="toggleDone(this)">
+                        ✓
+                    </button>
+
+                </div>
+
+                <div class="event-actions">
+
+                    <a class="small-btn map-btn"
+                       target="_blank"
+                       href="https://www.google.com/maps/search/?api=1&query=Meiji+Jingu">
+                        📍 Google Maps
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="timeline-item">
+
+            <div class="time">12:30</div>
+
+            <div class="event"
+                 data-event="d5-3">
+
+                <div class="event-top">
+
+                    <div>
+                        <h4>🍜 新宿午餐</h4>
+                        <p>新宿站附近</p>
+                    </div>
+
+                    <button class="check-btn"
+                            onclick="toggleDone(this)">
+                        ✓
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="timeline-item">
+
+            <div class="time">13:30</div>
+
+            <div class="event"
+                 data-event="d5-4">
+
+                <div class="event-top">
+
+                    <div>
+                        <h4>🛍️ 新宿最後掃貨</h4>
+                        <p>伊勢丹 → LUMINE → 高島屋 → Don Quijote</p>
+                    </div>
+
+                    <button class="check-btn"
+                            onclick="toggleDone(this)">
+                        ✓
+                    </button>
+
+                </div>
+
+                <div class="event-actions">
+
+                    <a class="small-btn map-btn"
+                       target="_blank"
+                       href="https://www.google.com/maps/search/?api=1&query=Shinjuku+Tokyo">
+                        📍 Google Maps
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="timeline-item">
+
+            <div class="time">16:00</div>
+
+            <div class="event"
+                 data-event="d5-5">
+
+                <div class="event-top">
+
+                    <div>
+                        <h4>✈️ 前往機場</h4>
+                        <p>取行李 → 成田／羽田</p>
+                    </div>
+
+                    <button class="check-btn"
+                            onclick="toggleDone(this)">
+                        ✓
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="restaurant-box">
+
+        <h3>🍜 今日餐廳推薦</h3>
+
+        <div class="restaurant-grid">
+
+            <div class="restaurant">
+                <h4>新宿</h4>
+                <p>拉麵・壽司・和牛</p>
+                <a class="small-btn map-btn"
+                   target="_blank"
+                   href="https://www.google.com/maps/search/?api=1&query=Shinjuku+Tokyo+restaurants">
+                    📍 尋找餐廳
+                </a>
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+</main>
+
+
+<!-- =========================
+     EDITOR
+========================= -->
+
+<div class="editor"
+     id="editor">
+
+    <div class="editor-panel">
+
+        <h3>✏️ Edit 行程</h3>
+
+        <div class="editor-grid">
+
+            <label>
+                景點名稱
+                <input id="editTitle">
+            </label>
+
+            <label>
+                時間
+                <input id="editTime">
+            </label>
+
+            <label>
+                備註
+                <textarea id="editNote"
+                          rows="3"></textarea>
+            </label>
+
+            <label>
+                Google Maps 搜尋名稱
+                <input id="editMap">
+            </label>
+
+        </div>
+
+        <div class="editor-actions">
+
+            <button class="cancel"
+                    onclick="closeEditor()">
+                Cancel
+            </button>
+
+            <button class="save"
+                    onclick="saveEditor()">
+                Save Changes
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<footer class="footer">
+
+    <h3>またね、東京。</h3>
+
+    <p>
+        TOKYO · 2026.11.25 — 11.29
+    </p>
+
+</footer>
+
+
+<script>
+
+/* =====================================================
+   COUNTDOWN
+===================================================== */
+
+const tripDate =
+    new Date("2026-11-25T00:00:00+09:00");
+
+function updateCountdown(){
+
+    const now = new Date();
+
+    const diff =
+        tripDate.getTime() - now.getTime();
+
+    const days =
+        Math.max(
+            0,
+            Math.ceil(
+                diff / (1000 * 60 * 60 * 24)
+            )
+        );
+
+    document.getElementById("countdown")
+        .innerHTML =
+        days +
+        ' <small>日</small>';
+
+}
+
+updateCountdown();
+
+setInterval(
+    updateCountdown,
+    60000
+);
+
+
+/* =====================================================
+   DAY SWITCH
+===================================================== */
+
+function showDay(day, button){
+
+    document
+        .querySelectorAll(".day-section")
+        .forEach(section => {
+
+            section.classList.remove("active");
+
+        });
+
+    document
+        .querySelectorAll(".day-btn")
+        .forEach(btn => {
+
+            btn.classList.remove("active");
+
+        });
+
+    document
+        .getElementById("day" + day)
+        .classList.add("active");
+
+    button.classList.add("active");
+
+    window.scrollTo({
+        top:
+            document
+            .querySelector(".day-nav")
+            .offsetTop,
+        behavior:"smooth"
+    });
+
+}
+
+
+/* =====================================================
+   CHECK-IN
+===================================================== */
+
+function toggleDone(button){
+
+    const event =
+        button.closest(".event");
+
+    const id =
+        event.dataset.event;
+
+    const done =
+        !event.classList.contains("completed");
+
+    event.classList.toggle(
+        "completed",
+        done
+    );
+
+    button.classList.toggle(
+        "checked",
+        done
+    );
+
+    localStorage.setItem(
+        "tokyo_done_" + id,
+        done
+    );
+
+    updateProgress();
+
+}
+
+
+/* =====================================================
+   RESTORE CHECK-IN
+===================================================== */
+
+function restoreDone(){
+
+    document
+        .querySelectorAll(".event[data-event]")
+        .forEach(event => {
+
+            const id =
+                event.dataset.event;
+
+            const done =
+                localStorage.getItem(
+                    "tokyo_done_" + id
+                ) === "true";
+
+            if(done){
+
+                event.classList.add(
+                    "completed"
+                );
+
+                const btn =
+                    event.querySelector(
+                        ".check-btn"
+                    );
+
+                if(btn){
+                    btn.classList.add(
+                        "checked"
+                    );
+                }
+
+            }
+
+        });
+
+    updateProgress();
+
+}
+
+
+/* =====================================================
+   PROGRESS
+===================================================== */
+
+function updateProgress(){
+
+    const all =
+        document.querySelectorAll(
+            ".event[data-event]"
+        );
+
+    const done =
+        document.querySelectorAll(
+            ".event.completed"
+        );
+
+    const percentage =
+        all.length
+        ? Math.round(
+            done.length /
+            all.length *
+            100
+        )
+        : 0;
+
+    document.getElementById(
+        "progressText"
+    ).innerText =
+        percentage + "% 完成";
+
+}
+
+
+/* =====================================================
+   BUDGET
+===================================================== */
+
+function calculateBudget(){
+
+    let total = 0;
+
+    document
+        .querySelectorAll("[data-budget]")
+        .forEach(input => {
+
+            total +=
+                Number(input.value) || 0;
+
+        });
+
+    document.getElementById(
+        "budgetTotal"
+    ).innerText =
+        total.toLocaleString();
+
+    localStorage.setItem(
+        "tokyo_budget",
+        JSON.stringify(
+            Array.from(
+                document.querySelectorAll(
+                    "[data-budget]"
+                )
+            ).map(i => i.value)
+        )
+    );
+
+}
+
+
+document
+    .querySelectorAll("[data-budget]")
+    .forEach(input => {
+
+        input.addEventListener(
+            "input",
+            calculateBudget
+        );
+
+    });
+
+
+/* =====================================================
+   RESTORE BUDGET
+===================================================== */
+
+function restoreBudget(){
+
+    const saved =
+        JSON.parse(
+            localStorage.getItem(
+                "tokyo_budget"
+            ) || "[]"
+        );
+
+    const inputs =
+        document.querySelectorAll(
+            "[data-budget]"
+        );
+
+    saved.forEach(
+        (value,index) => {
+
+            if(inputs[index]){
+                inputs[index].value =
+                    value;
+            }
+
+        }
+    );
+
+    calculateBudget();
+
+}
+
+
+/* =====================================================
+   EDITOR
+===================================================== */
+
+let currentEvent = null;
+
+function openEditor(id){
+
+    currentEvent =
+        document.querySelector(
+            '[data-event="' + id + '"]'
+        );
+
+    if(!currentEvent) return;
+
+    const title =
+        currentEvent.querySelector("h4");
+
+    const note =
+        currentEvent.querySelector("p");
+
+    document.getElementById(
+        "editTitle"
+    ).value =
+        title
+        ? title.innerText
+        : "";
+
+    document.getElementById(
+        "editNote"
+    ).value =
+        note
+        ? note.innerText
+        : "";
+
+    document.getElementById(
+        "editTime"
+    ).value =
+        currentEvent
+        .closest(".timeline-item")
+        .querySelector(".time")
+        .innerText;
+
+    document.getElementById(
+        "editMap"
+    ).value =
+        localStorage.getItem(
+            "tokyo_map_" + id
+        ) || "";
+
+    document
+        .getElementById("editor")
+        .classList.add("show");
+
+}
+
+
+function closeEditor(){
+
+    document
+        .getElementById("editor")
+        .classList.remove("show");
+
+    currentEvent = null;
+
+}
+
+
+function saveEditor(){
+
+    if(!currentEvent) return;
+
+    const id =
+        currentEvent.dataset.event;
+
+    const title =
+        document.getElementById(
+            "editTitle"
+        ).value;
+
+    const note =
+        document.getElementById(
+            "editNote"
+        ).value;
+
+    const time =
+        document.getElementById(
+            "editTime"
+        ).value;
+
+    const map =
+        document.getElementById(
+            "editMap"
+        ).value;
+
+    currentEvent.querySelector(
+        "h4"
+    ).innerText = title;
+
+    currentEvent.querySelector(
+        "p"
+    ).innerText = note;
+
+    currentEvent
+        .closest(".timeline-item")
+        .querySelector(".time")
+        .innerText = time;
+
+    localStorage.setItem(
+        "tokyo_title_" + id,
+        title
+    );
+
+    localStorage.setItem(
+        "tokyo_note_" + id,
+        note
+    );
+
+    localStorage.setItem(
+        "tokyo_time_" + id,
+        time
+    );
+
+    localStorage.setItem(
+        "tokyo_map_" + id,
+        map
+    );
+
+    closeEditor();
+
+}
+
+
+/* =====================================================
+   RESTORE EDITS
+===================================================== */
+
+function restoreEdits(){
+
+    document
+        .querySelectorAll(".event[data-event]")
+        .forEach(event => {
+
+            const id =
+                event.dataset.event;
+
+            const title =
+                localStorage.getItem(
+                    "tokyo_title_" + id
+                );
+
+            const note =
+                localStorage.getItem(
+                    "tokyo_note_" + id
+                );
+
+            const time =
+                localStorage.getItem(
+                    "tokyo_time_" + id
+                );
+
+            if(title){
+
+                event.querySelector(
+                    "h4"
+                ).innerText = title;
+
+            }
+
+            if(note){
+
+                event.querySelector(
+                    "p"
+                ).innerText = note;
+
+            }
+
+            if(time){
+
+                event
+                    .closest(".timeline-item")
+                    .querySelector(".time")
+                    .innerText = time;
+
+            }
+
+        });
+
+}
+
+
+/* =====================================================
+   EDIT MODE
+===================================================== */
+
+function toggleEditMode(){
+
+    const btn =
+        document.querySelector(
+            ".toolbar .primary"
+        );
+
+    const editing =
+        btn.classList.toggle(
+            "active"
+        );
+
+    btn.innerText =
+        editing
+        ? "✓ Editing"
+        : "✏️ Edit Mode";
+
+    document
+        .querySelectorAll(".event")
+        .forEach(event => {
+
+            if(editing){
+
+                if(!event.querySelector(
+                    ".edit-btn"
+                )){
+
+                    const action =
+                        document.createElement(
+                            "button"
+                        );
+
+                    action.className =
+                        "small-btn edit-btn";
+
+                    action.innerText =
+                        "✏️ Edit";
+
+                    action.onclick =
+                        () =>
+                        openEditor(
+                            event.dataset.event
+                        );
+
+                    let actions =
+                        event.querySelector(
+                            ".event-actions"
+                        );
+
+                    if(!actions){
+
+                        actions =
+                            document.createElement(
+                                "div"
+                            );
+
+                        actions.className =
+                            "event-actions";
+
+                        event.appendChild(
+                            actions
+                        );
+
+                    }
+
+                    actions.appendChild(
+                        action
+                    );
+
+                }
+
+            }
+
+        });
+
+}
+
+
+/* =====================================================
+   THEME
+===================================================== */
+
+function toggleTheme(){
+
+    const dark =
+        document.body.dataset.dark === "1";
+
+    if(dark){
+
+        document.body.dataset.dark =
+            "0";
+
+        document.documentElement
+            .style.setProperty(
+                "--bg",
+                "#f4f2ee"
+            );
+
+        document.documentElement
+            .style.setProperty(
+                "--card",
+                "#ffffff"
+            );
+
+        document.documentElement
+            .style.setProperty(
+                "--text",
+                "#1d1d1f"
+            );
+
+        localStorage.setItem(
+            "tokyo_theme",
+            "light"
+        );
+
+    }else{
+
+        document.body.dataset.dark =
+            "1";
+
+        document.documentElement
+            .style.setProperty(
+                "--bg",
+                "#151515"
+            );
+
+        document.documentElement
+            .style.setProperty(
+                "--card",
+                "#222222"
+            );
+
+        document.documentElement
+            .style.setProperty(
+                "--text",
+                "#ffffff"
+            );
+
+        localStorage.setItem(
+            "tokyo_theme",
+            "dark"
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   BACKUP
+===================================================== */
+
+function exportData(){
+
+    const data = {};
+
+    for(let i=0;i<localStorage.length;i++){
+
+        const key =
+            localStorage.key(i);
+
+        if(
+            key &&
+            key.startsWith("tokyo_")
+        ){
+
+            data[key] =
+                localStorage.getItem(key);
+
+        }
+
+    }
+
+    const blob =
+        new Blob(
+            [
+                JSON.stringify(
+                    data,
+                    null,
+                    2
+                )
+            ],
+            {
+                type:"application/json"
+            }
+        );
+
+    const url =
+        URL.createObjectURL(blob);
+
+    const a =
+        document.createElement("a");
+
+    a.href = url;
+
+    a.download =
+        "tokyo-trip-backup.json";
+
+    a.click();
+
+    URL.revokeObjectURL(url);
+
+}
+
+
+/* =====================================================
+   RESET
+===================================================== */
+
+function resetData(){
+
+    if(
+        !confirm(
+            "確定要清除所有修改及打卡記錄？"
+        )
+    ) return;
+
+    Object.keys(localStorage)
+        .filter(
+            key =>
+            key.startsWith("tokyo_")
+        )
+        .forEach(
+            key =>
+            localStorage.removeItem(key)
+        );
+
+    location.reload();
+
+}
+
+
+/* =====================================================
+   INIT
+===================================================== */
+
+restoreDone();
+restoreEdits();
+restoreBudget();
+
+</script>
+
+</body>
+</html>
+
